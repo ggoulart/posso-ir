@@ -17,9 +17,9 @@ export class GermanyController {
       const appointment = await this.germanyClient.fetchPoaAppointment()
       const travelBan = await this.germanyClient.fetchTravelBan()
 
-      console.log(appointment)
-      console.log(travelBan)
-      res.sendStatus(200)
+      const defaultResp = `<html><body><div style='text-align:center;'><h1>Consigo fazer agendamentos: ${appointment}</h1><h1>Data do travel ban: ${travelBan}</h1></div></body></html>`
+
+      res.status(200).send(defaultResp)
     } catch (e) {
       logger.error(e)
       res.sendStatus(500)
