@@ -39,6 +39,6 @@ process.on('uncaughtException', (error) => {
     }
   } catch (error) {
     logger.error(`App exited with error: ${error}`)
-    process.exit(ExitStatus.Failure)
+    // process.exit(ExitStatus.Failure)
   }
 })()
