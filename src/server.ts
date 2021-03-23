@@ -11,11 +11,9 @@ import { GermanyClient } from '@src/clients/germanyClient'
 
 export class SetupServer extends Server {
   private server?: http.Server
-  private readonly port: number
 
-  constructor(port: number) {
+  constructor() {
     super()
-    this.port = port
   }
 
   /*
@@ -57,8 +55,9 @@ export class SetupServer extends Server {
   }
 
   public start(): void {
-    this.server = this.app.listen(this.port, () => {
-      logger.info('Server listening on port: ' + this.port)
+    const port = Number(process.env.PORT)
+    this.server = this.app.listen(port, '0.0.0.0', () => {
+      logger.info('Server listening on port: ' + port)
     })
   }
 }
