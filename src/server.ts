@@ -11,9 +11,11 @@ import { GermanyClient } from '@src/clients/germanyClient'
 
 export class SetupServer extends Server {
   private server?: http.Server
+  private readonly port: number
 
-  constructor(private port = 3000) {
+  constructor(port: number) {
     super()
+    this.port = port
   }
 
   /*
