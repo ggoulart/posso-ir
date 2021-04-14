@@ -5,9 +5,13 @@ import * as http from 'http'
 // import expressPino from 'express-pino-logger'
 import cors from 'cors'
 import logger from './logger'
-import { GermanyController } from '@src/controllers/germany'
 import axios from 'axios'
-import { GermanyClient } from '@src/clients/germanyClient'
+
+import { GermanyController } from '@src/controllers/germany'
+import { GermanyClient } from '@src/clients/germany'
+import { FixerIoClient } from '@src/clients/fixer-io'
+import { Germany } from '@src/services/germany'
+import { Currency } from '@src/services/currency'
 
 export class SetupServer extends Server {
   private server?: http.Server
@@ -32,8 +36,15 @@ export class SetupServer extends Server {
 
   private setup(): void {
     const axiosInstance = axios.create()
+
+    const fixerIoClient = new FixerIoClient(axiosInstance, process.env.FIXER_IO_KEY || '')
     const germanyClient = new GermanyClient(axiosInstance)
-    const germanyController = new GermanyController(germanyClient)
+
+    const germanyService = new Germany(germanyClient, fixerIoClient)
+    const currencyService = new Currency(fixerIoClient)
+
+    const germanyController = new GermanyController(germanyService, currencyService)
+
     this.addControllers([germanyController])
   }
 
@@ -55,7 +66,7 @@ export class SetupServer extends Server {
   }
 
   public start(): void {
-    const port = Number(process.env.PORT)
+    const port = Number(process.env.PORT || 8888)
     this.server = this.app.listen(port, '0.0.0.0', () => {
       logger.info('Server listening on port: ' + port)
     })

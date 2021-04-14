@@ -7,18 +7,15 @@ enum ExitStatus {
 }
 
 process.on('unhandledRejection', (reason, promise) => {
-  logger.error(
-    `App exiting due to an unhandled promise: ${promise} and reason: ${reason}`,
-  )
+  logger.error(`App exiting due to an unhandled promise: ${promise} and reason: ${reason}`)
   throw reason
 })
 
 process.on('uncaughtException', (error) => {
   logger.error(`App exiting due to an uncaught exception: ${error}`)
   process.exit(ExitStatus.Failure)
-});
-
-(async (): Promise<void> => {
+})
+;(async (): Promise<void> => {
   try {
     const server = new SetupServer()
     await server.init()
