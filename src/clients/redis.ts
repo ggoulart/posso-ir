@@ -5,12 +5,12 @@ export class redisClient {
   private readonly client
 
   constructor(redisURL: string) {
-    this.client = asyncRedis.createClient({
+    this.client = asyncRedis.createClient(redisURL, {
       tls: { rejectUnauthorized: false },
     })
   }
 
   public async getEurToBrl(): Promise<void> {
-
+    //
   }
 }

@@ -1,0 +1,33 @@
+<html lang="pt-BR">
+<head>
+  <script type="text/javascript">
+    const getInfo = () => {
+      fetch("https://posso-ir.herokuapp.com/germany")
+        .then(resp => resp.json())
+        .then(data => {
+          updateValue("appointment", data.appointment)
+          updateValue("travelBan", data.travelBan)
+          updateValue("rate", data.rate)
+        })
+        .catch(err => {
+          console.log(err);
+        });
+    };
+
+    const updateValue = (id, value) => {
+      document.getElementById(id).innerHTML = document.getElementById(id).innerHTML.replace(/loading.../, value)
+    }
+
+    window.onload = getInfo;
+
+  </script>
+  <title>Posso Ir?</title>
+</head>
+<body>
+<div style="text-align:center;">
+  <h1 id="appointment">Consigo fazer agendamentos: loading...</h1>
+  <h1 id="travelBan">Data do travel ban: loading...</h1>
+  <h1 id="rate">Euro: loading...</h1>
+</div>
+</body>
+</html>

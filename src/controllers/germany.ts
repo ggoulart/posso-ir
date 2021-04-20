@@ -1,3 +1,5 @@
+import path from 'path'
+
 import { Controller, Get } from '@overnightjs/core'
 import { Request, Response } from 'express'
 import logger from '@src/logger'
@@ -10,7 +12,7 @@ export interface CurrencyService {
   getEurToBrl(): Promise<number>
 }
 
-@Controller('germany')
+@Controller('')
 export class GermanyController {
   private germanyService: CountryService
   private currencyService: CurrencyService
@@ -20,7 +22,12 @@ export class GermanyController {
     this.currencyService = currencyService
   }
 
-  @Get('')
+  @Get()
+  public async index(req: Request, res: Response): Promise<void> {
+    res.sendFile(path.join(__dirname, '../../public', 'index.html'))
+  }
+
+  @Get('germany')
   public async canIGo(req: Request, res: Response): Promise<void> {
     try {
       const { appointment, travelBan } = await this.germanyService
@@ -40,22 +47,11 @@ export class GermanyController {
           return 0
         })
 
-      res.status(200).send({appointment, travelBan, rate})
+      res.status(200).setHeader('Content-Type', 'application/json')
+      res.send({ appointment, travelBan, rate })
     } catch (e) {
       logger.error(e)
       res.sendStatus(500)
     }
-  }
-
-  private static canIGoResp(appointment: boolean, travelBan: string, rate: number): string {
-    return `<html>
-      <body>
-        <div style='text-align:center;'>
-          <h1>Consigo fazer agendamentos: ${appointment}</h1>
-          <h1>Data do travel ban: ${travelBan}</h1>
-          <h1>Euro: ${rate}</h1>
-        </div>
-      </body>
-    </html>`
   }
 }

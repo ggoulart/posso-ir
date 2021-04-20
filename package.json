@@ -4,7 +4,8 @@
   "description": "typescript template project",
   "main": "index.js",
   "scripts": {
-    "build": "tsc",
+    "build": "tsc && npm run copy-files",
+    "copy-files": "cp -rp public/ ./dist/public",
     "start": "node dist/src/index.js",
     "start:local": "ts-node-dev --transpile-only src/index.ts | pino-pretty -c",
     "test": "npm test:unit && npm test:functional",
