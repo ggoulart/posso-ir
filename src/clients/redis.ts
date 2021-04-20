@@ -5,7 +5,7 @@ export class redisClient {
   private readonly client
 
   constructor(redisURL: string) {
-    this.client = asyncRedis.createClient(redisURL, {
+    this.client = asyncRedis.createClient({
       tls: { rejectUnauthorized: false },
     })
   }

@@ -10,7 +10,7 @@ export interface CurrencyService {
   getEurToBrl(): Promise<number>
 }
 
-@Controller('')
+@Controller('germany')
 export class GermanyController {
   private germanyService: CountryService
   private currencyService: CurrencyService
@@ -40,7 +40,7 @@ export class GermanyController {
           return 0
         })
 
-      res.status(200).send(GermanyController.canIGoResp(appointment, travelBan, rate))
+      res.status(200).send({appointment, travelBan, rate})
     } catch (e) {
       logger.error(e)
       res.sendStatus(500)

@@ -2,7 +2,6 @@ import './util/module-alias'
 import { Server } from '@overnightjs/core'
 import { Application } from 'express'
 import * as http from 'http'
-// import expressPino from 'express-pino-logger'
 import cors from 'cors'
 import logger from './logger'
 import axios from 'axios'
@@ -12,7 +11,6 @@ import { GermanyClient } from '@src/clients/germany'
 import { FixerIoClient } from '@src/clients/fixer-io'
 import { Germany } from '@src/services/germany'
 import { Currency } from '@src/services/currency'
-import { redisClient } from '@src/clients/redis'
 
 export class SetupServer extends Server {
   private server?: http.Server
@@ -37,13 +35,12 @@ export class SetupServer extends Server {
 
   private setup(): void {
     const axiosInstance = axios.create()
-    const redisInstance = new redisClient(process.env.REDIS_TLS_URL || '')
 
     const fixerIoClient = new FixerIoClient(axiosInstance, process.env.FIXER_IO_KEY || '')
     const germanyClient = new GermanyClient(axiosInstance)
 
     const germanyService = new Germany(germanyClient, fixerIoClient)
-    const currencyService = new Currency(fixerIoClient, redisInstance)
+    const currencyService = new Currency(fixerIoClient)
 
     const germanyController = new GermanyController(germanyService, currencyService)
 
