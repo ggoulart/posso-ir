@@ -1,16 +1,20 @@
 import './util/module-alias'
 import { Server } from '@overnightjs/core'
-import { Application } from 'express'
+import express, { Application } from "express";
 import * as http from 'http'
 import cors from 'cors'
-import logger from './logger'
 import axios from 'axios'
+import bodyParser from 'body-parser'
+import path from "path";
 
+import logger from './logger'
 import { GermanyController } from '@src/controllers/germany'
 import { GermanyClient } from '@src/clients/germany'
 import { FixerIoClient } from '@src/clients/fixer-io'
 import { Germany } from '@src/services/germany'
 import { Currency } from '@src/services/currency'
+import { BaseController } from '@src/controllers/base'
+import { SubscriberController } from "@src/controllers/subscriber";
 
 export class SetupServer extends Server {
   private server?: http.Server
@@ -30,6 +34,9 @@ export class SetupServer extends Server {
 
   private setupExpress(): void {
     // this.app.use(expressPino({ logger }))
+    console.log(path.join(__dirname, "../public"))
+    this.app.use(express.static(path.join(__dirname, "../public")))
+    this.app.use(bodyParser.json())
     this.app.use(cors({ origin: '*' }))
   }
 
@@ -42,9 +49,11 @@ export class SetupServer extends Server {
     const germanyService = new Germany(germanyClient, fixerIoClient)
     const currencyService = new Currency(fixerIoClient)
 
+    const baseController = new BaseController()
+    const subscriberController = new SubscriberController()
     const germanyController = new GermanyController(germanyService, currencyService)
 
-    this.addControllers([germanyController])
+    this.addControllers([baseController, subscriberController, germanyController])
   }
 
   public getApp(): Application {

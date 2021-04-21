@@ -1,5 +1,3 @@
-import path from 'path'
-
 import { Controller, Get } from '@overnightjs/core'
 import { Request, Response } from 'express'
 import logger from '@src/logger'
@@ -12,7 +10,7 @@ export interface CurrencyService {
   getEurToBrl(): Promise<number>
 }
 
-@Controller('')
+@Controller('germany')
 export class GermanyController {
   private germanyService: CountryService
   private currencyService: CurrencyService
@@ -23,11 +21,6 @@ export class GermanyController {
   }
 
   @Get()
-  public async index(req: Request, res: Response): Promise<void> {
-    res.sendFile(path.join(__dirname, '../../public', 'index.html'))
-  }
-
-  @Get('germany')
   public async canIGo(req: Request, res: Response): Promise<void> {
     try {
       const { appointment, travelBan } = await this.germanyService
