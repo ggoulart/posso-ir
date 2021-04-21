@@ -5,9 +5,9 @@
       fetch("https://posso-ir.herokuapp.com/germany")
         .then(resp => resp.json())
         .then(data => {
-          updateValue("appointment", data.appointment)
-          updateValue("travelBan", data.travelBan)
-          updateValue("rate", data.rate)
+          updateValue("appointment", data.appointment);
+          updateValue("travelBan", data.travelBan);
+          updateValue("rate", data.rate);
         })
         .catch(err => {
           console.log(err);
@@ -15,10 +15,17 @@
     };
 
     const updateValue = (id, value) => {
-      document.getElementById(id).innerHTML = document.getElementById(id).innerHTML.replace(/loading.../, value)
-    }
+      document.getElementById(id).innerHTML = document.getElementById(id).innerHTML.replace(/loading.../, value);
+    };
 
     window.onload = getInfo;
+
+    setInterval(() => {
+      updateValue("appointment", "loading...");
+      updateValue("travelBan", "loading...");
+      updateValue("rate", "loading...");
+      getInfo();
+    }, 600000);
   </script>
   <title>Posso Ir?</title>
 </head>
